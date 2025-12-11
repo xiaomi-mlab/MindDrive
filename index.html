@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <meta charset="utf-8">
+  <meta name="description"
+        content="MindDrive: A Vision-Language-Action Model for Autonomous Driving via Online Reinforcement Learning">
+  <meta name="keywords" content="VLM, Autonomous Driving, End-to-End">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MindDrive: A Vision-Language-Action Model for Autonomous Driving via Online Reinforcement Learning</title>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+
+    gtag('config', 'G-PYVRSFMDRL');
+  </script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title" style="white-space: nowrap;">
+            MindDrive: A Vision-Language-Action Model 
+          </h1>
+          <h1 class="title is-1 publication-title" style="white-space: nowrap;">
+            for Autonomous Driving via Online Reinforcement Learning 
+          </h1>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              Haoyu Fu</a><sup>1*</sup>,
+            </span>
+            <span class="author-block">
+              Diankun Zhang</a><sup>2*</sup>,</span>
+            <span class="author-block">
+              Zongchuang Zhao</a><sup>1</sup>,</span>
+            <span class="author-block">
+              Jianfeng Cui</a><sup>2</sup>,
+            </span>
+            <p></p>
+            <span class="author-block">
+              Hongwei Xie</a><sup>2†</sup>,
+            </span>
+            <span class="author-block">
+              Bing Wang</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              Guang Chen</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              Dingkang Liang</a><sup>1†</sup>,
+            </span>
+            <span class="author-block">
+              Xiang Bai</a><sup>1✉</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>Huazhong University of Science &amp; Technology</span>
+            <span class="author-block"><sup>2</sup>Xiaomi EV</span>
+            <p></p>
+            <span class="author-block"><sup>†</sup><small>Project Lead.</small></span>
+            <span class="author-block"><sup>✉</sup><small>Corresponding Author.</small></span>
+            <span class="author-block"><sup>*</sup><small>Equal Contribution.</small></span>
+            
+            
+          <!-- </div> -->
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href="https://github.com/xiaomi-mlab/Minddrive"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code</span>
+                  </a>
+              </span>
+            </div>
+
+            
+            
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Current Vision-Language-Action (VLA) paradigms in autonomous driving primarily rely on Imitation Learning (IL), which introduces inherent challenges such as distribution shift and causal confusion. Online Reinforcement Learning offers a promising pathway to address these issues through trial-and-error learning. However, applying online reinforcement learning to VLA models in autonomous driving is hindered by inefficient exploration in continuous action spaces. To overcome this limitation, we propose MindDrive, a VLA framework comprising a large language model (LLM) with two distinct sets of LoRA parameters. The one LLM serves as a Decision Expert for scenario reasoning and driving decision-making, while the other acts as an Action Expert that dynamically maps linguistic decisions into feasible trajectories. By feeding trajectory-level rewards back into the reasoning space, MindDrive enables trial-and-error learning over a finite set of discrete linguistic driving decisions, instead of operating directly in a continuous action space. This approach effectively balances optimal decision-making in complex scenarios, human-like driving behavior, and efficient exploration in online reinforcement learning. MindDrive achieves strong closed-loop performance on the challenging Bench2Drive benchmark, with a Driving Score (DS) of 78.04 and a Success Rate (SR) of 55.09\%. To the best of our knowledge, this is the first work to demonstrate the effectiveness of online reinforcement learning for the VLA model in autonomous driving. <br><br><br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+
+</section>
+
+
+<section class="section"></section>
+  <div class="container is-max-desktop">
+    <h2 class="title is-2" style="white-space: nowrap;"> Comprehensive capabilities of MindDrive in close-loop simulation</h2>
+    <video controls width="100%" autoplay controls muted loop playsinline>
+      <source src="./static/videos/minddrive-demo.mp4" type="video/mp4">
+    </video>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-2">Framework</h2>
+    <div class="content has-text-justified">
+      Overview of MindDrive and its training pipeline. MindDrive consists of two experts, both of which utilize the same base LLM and fine-tune with distinct LoRA parameters, respectively. Decision Expert generates high-level meta-actions from scene and text inputs, and Action Expert maps these meta-actions to concrete trajectories. MindDrive is first trained with Imitation Learning (IL) on expert data to align meta-actions with trajectories. Then it is refined through online reinforcement learning in a closed-loop simulator, where action rewards directly enhance the model's reasoning capabilities.
+    </div>
+    <img src="./static/images/framework.png">
+  </div>
+</section>
+<!-- <div style="height: 30px;"></div> -->
+<section class="section"></section>
+  <div class="container is-max-desktop">
+    <h2 class="title is-2">Main Results</h2>
+    <div class="content has-text-justified">
+      Closed-loop and Multi-Ability Results of E2E-AD Methods in Bench2Drive under \textbf{base} training set. C/L refers to camera/LiDAR. * denote expert feature distillation. $\dag$ represent reproducing the result based on official code. DS: Driving Score, SR: Success Rate, M: Merging, O: Overtaking, EB: Emergency Brake, GW: Give Way, TS: Traffic Sign.
+    </div>
+    <img src="./static/images/Mainresults.jpg">
+  </div>
+</section>
+
+<section class="section"></section>
+  <div class="container is-max-desktop">
+    <h2 class="title is-2">Qualitative Results</h2>
+    <div class="content has-text-justified">
+      Qualitative results of MindDrive after IL and RL on the Bench2Drive closed-loop evaluation set. The <span style="color: green;">green</span> and <span style="color: blue;">blue</span> refer to the prediction speed and path meta-actions, respectively. <span style="color: red;">Red</span> denote a collision has occurred.
+    </div>
+    <img src="./static/images/QualitativeResults.png">
+  </div>
+</section>
+
+<div style="height: 30px;"></div>
+
+<style>
+  .container.fixed-width {
+    max-width: 1000px; 
+    margin: 0 auto;
+  }
+  .title-container {
+    padding-left: 0px;  
+  }
+  .columns {
+    margin-top: 20px; 
+  }
+</style>
+
+<head>
+  <style>
+    .video-container-wrapper {
+      background-color: #f0f0f0; 
+      padding: 20px; 
+      border-radius: 5px; 
+    }
+
+    .video-container-wrapper video {
+      width: 100%; 
+      border-radius: 8px; 
+    }
+
+    .columns {
+      margin-bottom: 20px; 
+    }
+
+    .background-container {
+      background-color: #f0f0f0; 
+      padding: 30px; 
+      border-radius: 15px; 
+    }
+    /* IL (light red) and RL (light green) column backgrounds */
+    .il-column {
+      background-color: #fff0f0;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    .rl-column {
+      background-color: #f0fff0;
+      border-radius: 10px;
+      padding: 12px;
+    }
+    /* Ensure video containers don't overflow their colored boxes */
+    .il-column .video-container,
+    .rl-column .video-container {
+      width: 100%;
+      border-radius: 6px;
+      display: block;
+    }
+  </style>
+</head>
+
+<div class="container fixed-width">
+  <div class="title-container"> 
+    <h2 class="title is-2">Closed loop evaluation in different scenarios</h2>  
+  </div>
+  <div style="height: 50px;"></div>
+
+  <div class="container background-container">
+    <div class="columns is-multiline is-variable is-2 is-centered">
+    <div class="column is-half">
+    <h3 class="title is-4 has-text-centered">Construction Obstacle</h3>
+        <div class="content"> 
+          <video class="video-container" autoplay controls muted loop playsinline>
+            <source src="static/videos/RouteScenario_2509_rep0_Town12_ConstructionObstacle_1_7_11_25_03_29_56.mp4" type="video/mp4">
+          </video>
+        </div>
+  </div>
+  <div class="column is-half">
+    <h3 class="title is-4 has-text-centered">Pedestrian Crossing</h3>
+        <div class="content">
+          <video class="video-container" autoplay controls muted loop playsinline>
+            <source src="static/videos/RouteScenario_14194_rep0_Town12_PedestrianCrossing_1_1_11_25_03_29_41.mp4" type="video/mp4">
+          </video>
+        </div>
+  </div>
+  </div>
+
+  <p></p>
+  <div style="height: 10px;"></div>
+  <div class="columns is-multiline is-variable is-2 is-centered">
+    <div class="column is-half">
+    <h3 class="title is-4 has-text-centered">Accident</h3>
+        <div class="content"> 
+          <video class="video-container" autoplay controls muted loop playsinline>
+            <source src="static/videos/RouteScenario_2534_rep0_Town12_Accident_1_6_11_25_05_27_11.mp4" type="video/mp4">
+          </video>
+        </div>
+  </div>
+  <div class="column is-half">
+    <h3 class="title is-4 has-text-centered">Dynamic Object Crossing</h3>
+        <div class="content">
+          <video class="video-container" autoplay controls muted loop playsinline>
+            <source src="static/videos/RouteScenario_24211_rep0_Town01_DynamicObjectCrossing_1_15_11_25_04_27_50.mp4" type="video/mp4">
+          </video>
+        </div>
+  </div>
+  </div>
+  </div>
+  <div class="title-container"> 
+    <h2 class="title is-2">IL vs. RL: A Visual Comparison</h2>  
+  </div>
+  <div style="height: 20px;"></div>
+
+  <div class="container background-container">
+    <div class="columns">
+      <!-- IL column (left) -->
+      <div class="column is-half il-column">
+        <h3 class="title is-4 has-text-centered">IL (Imitation Learning)</h3>
+        <div class="content">
+          <div class="box">
+            <h4 class="subtitle is-6 has-text-centered">Parking Crossing Pedestrain</h4>
+            <video class="video-container" controls muted playsinline>
+              <source src="static/videos/RouteScenario_18252_rep0_Town12_ParkingCrossingPedestrian_1_25_11_27_11_30_17_IL.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="box">
+            <h4 class="subtitle is-6 has-text-centered">Vanilla Non-Signalized Turn</h4>
+            <video class="video-container" controls muted playsinline>
+              <source src="static/videos/RouteScenario_2397_rep0_Town12_VanillaNonSignalizedTurn_1_25_11_27_11_34_46_IL.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="box">
+            <h4 class="subtitle is-6 has-text-centered">Accident</h4>
+            <video class="video-container" controls muted playsinline>
+              <source src="static/videos/RouteScenario_3307_rep0_Town13_Accident_1_0_11_27_15_20_31_IL.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <!-- RL column (right) -->
+      <div class="column is-half rl-column">
+        <h3 class="title is-4 has-text-centered">RL (Reinforcement Learning)</h3>
+        <div class="content">
+          <div class="box">
+            <h4 class="subtitle is-6 has-text-centered">Parking Crossing Pedestrain</h4>
+            <video class="video-container" controls muted playsinline>
+              <source src="static/videos/RouteScenario_18252_rep0_Town12_ParkingCrossingPedestrian_1_25_11_27_11_30_17_RL.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="box">
+            <h4 class="subtitle is-6 has-text-centered">Vanilla Non-Signalized Turn</h4>
+            <video class="video-container" controls muted playsinline>
+              <source src="static/videos/RouteScenario_2397_rep0_Town12_VanillaNonSignalizedTurn_1_25_11_27_15_47_42_RL.mp4" type="video/mp4">
+            </video>
+          </div>
+          <div class="box">
+            <h4 class="subtitle is-6 has-text-centered">Accident</h4>
+            <video class="video-container" controls muted playsinline>
+              <source src="static/videos/RouteScenario_3307_rep0_Town13_Accident_1_0_11_27_15_20_31_RL.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 30px;"></div>
+  </div>
+
+</div>
+
+<div style="height: 30px;"></div>
+
+
+</div>
+<div style="margin-top: 30px;"></div>
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title is-3">BibTeX</h2>
+    <pre><code>@article{fu2025minddrive,
+  title={MindDrive: A Vision-Language-Action Model for Autonomous Driving via Online Reinforcement Learning},
+  author={Haoyu Fu and Diankun Zhang and Zongchuang Zhao and Jianfeng Cui and Dingkang Liang  and Hongwei Xie and Bing Wang and Xiang Bai},
+  journal={},
+  year={2025}
+}</code></pre>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="content has-text-centered">
+      <!-- <a class="icon-link"
+         href="https://arxiv.org/abs/2310.08528">
+        <i class="fas fa-file-pdf"></i>
+      </a>  -->
+      <a class="icon-link" href="https://github.com/hustvl" class="external-link" disabled>
+        <i class="fab fa-github"></i>
+      </a>
+    </div>
+    <div class="content has-text-centered">
+      <div id="view-counter" style="font-size:14px;color:#4a4a4a;">Page views: <strong id="page-views">--</strong></div>
+    </div>
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            The source code reference from from <a
+              href="https://github.com/HGao-cv/RAD">RAD</a>,
+              we thank the authors for sharing the templates.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+</footer>
+
+<script>
+  // Page view counter: try CountAPI first, fall back to localStorage
+  (function(){
+    const el = document.getElementById('page-views');
+    if(!el) return;
+    const namespace = 'minddrive';
+    const key = 'index';
+    const url = `https://api.countapi.xyz/hit/${namespace}/${key}`;
+
+    function setValue(n){
+      el.textContent = n.toLocaleString();
+    }
+
+    // Try CountAPI
+    fetch(url, {cache: 'no-store'})
+      .then(r=>{ if(!r.ok) throw new Error('bad'); return r.json(); })
+      .then(data=>{
+        if(data && typeof data.value !== 'undefined'){
+          setValue(data.value);
+          try{ localStorage.setItem('minddrive_pageviews', String(data.value)); }catch(e){}
+        } else {
+          throw new Error('no value');
+        }
+      })
+      .catch(()=>{
+        // fallback: increment or read from localStorage (per-browser)
+        try{
+          let v = parseInt(localStorage.getItem('minddrive_pageviews')||'0',10);
+          v = isNaN(v)?1:(v+1);
+          localStorage.setItem('minddrive_pageviews', String(v));
+          setValue(v);
+        }catch(e){
+          el.textContent = 'N/A';
+        }
+      });
+  })();
+</script>
+
+</body>
+</html>
