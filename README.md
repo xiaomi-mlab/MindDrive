@@ -1,5 +1,3 @@
-<!-- # ORION: A Holistic End-to-End Autonomous Driving Framework by Vision-Language Instructed Action Generation -->
-
 <div align="center">
 <h3> MindDrive: A Vision-Language-Action Model for Autonomous Driving Utilizing Language as Action in Online Reinforcement Learning </h3>
 
@@ -9,7 +7,7 @@ Haoyu Fu<sup>1\*</sup>, Diankun Zhang<sup>2\*</sup>, Zongchuang Zhao<sup>1</sup>
 
 (\*) Equal contribution. (†) Project leader.
 
-<a href=""><img src='https://img.shields.io/badge/arXiv-MindDrive-red' alt='Paper PDF'></a>
+<a href="https://arxiv.org/abs/2512.13636"><img src='https://img.shields.io/badge/arXiv-MindDrive-red' alt='Paper PDF'></a>
 <a href="https://xiaomi-mlab.github.io/MindDrive/"><img src='https://img.shields.io/badge/Project_Page-MindDrive-green' alt='Project Page'></a>
 </div>
 
@@ -26,12 +24,12 @@ Current Vision-Language-Action (VLA) paradigms in autonomous driving primarily r
 
 ## News
 
-`[2025/12/26]` [ArXiv](https://arxiv.org/abs/2503.19755) paper release.
+`[2025/12/16]` [ArXiv](https://arxiv.org/abs/2512.13636) paper release.
 
 ## Currently Supported Features
 
 - [ ] MindDrive Inference Framework
-- [ ] Close-loop Evalution
+- [ ] Closed-loop Evaluation
 - [ ] MindDrive Checkpoint
 - [ ] MindDrive Training Framework
 
@@ -39,14 +37,14 @@ Current Vision-Language-Action (VLA) paradigms in autonomous driving primarily r
 
 ## Results and Checkpoints
 
-### Orion and other baselines
-| Method | L2 (m) 2s | Driving Score | Success Rate(%) | Config | Download | Eval Json|
-| :---: | :---: | :---: | :---: |  :---: | :---: | :---: |
-| UniAD-Tiny |0.80 | 40.73 |  13.18 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_tiny_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/1psr7AKYHD7CitZ30Bz-9sA?pwd=1234 )| [Json](assets/results/UniAD-Tiny.json) |
-| UniAD-Base |0.73 | 45.81  |  16.36 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/tiny_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_base_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/11p9IUGqTax1f4W_qsdLCRw?pwd=1234) | [Json](assets/results/UniAD-Base.json) |
-| VAD        |0.91 | 42.35  | 15.00 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/vad/configs/VAD/VAD_base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/vad_b2d_base.pth)/[Baidu Cloud](https://pan.baidu.com/s/1rK7Z_D-JsA7kBJmEUcMMyg?pwd=1234) | [Json](assets/results/VAD.json) |
-| ORION-7B       |0.68 | 77.74  | 54.62 | [config](adzoo/orion/configs/orion_stage3.py) | [Hugging Face](https://huggingface.co/poleyzdk/Orion/blob/main/Orion.pth)| [Json](assets/results/ORION.json) |
-MindDrive-0.5B   |0.73   | 78.04  | 55.09 | config | - | - |
+### Closed-loop Results on Bench2Drive
+| Method         | Driving Score | Success Rate(%) | Config | Download | Eval Json |
+| :---:          | :---:        | :---:           | :---:  | :---:    | :---:     |
+| UniAD-Tiny     | 40.73        | 13.18           | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_tiny_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/1psr7AKYHD7CitZ30Bz-9sA?pwd=1234 )| [Json](assets/results/UniAD-Tiny.json) |
+| UniAD-Base     | 45.81        | 16.36           | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/tiny_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_base_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/11p9IUGqTax1f4W_qsdLCRw?pwd=1234) | [Json](assets/results/UniAD-Base.json) |
+| VAD            | 42.35        | 15.00           | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/vad/configs/VAD/VAD_base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/vad_b2d_base.pth)/[Baidu Cloud](https://pan.baidu.com/s/1rK7Z_D-JsA7kBJmEUcMMyg?pwd=1234) | [Json](assets/results/VAD.json) |
+| ORION-7B       | 77.74        | 54.62           | [config](adzoo/orion/configs/orion_stage3.py) | [Hugging Face](https://huggingface.co/poleyzdk/Orion/blob/main/Orion.pth)| [Json](assets/results/ORION.json) |
+| MindDrive-0.5B | 78.04        | 55.09           | config | - | - |
 
 
 ## Citation
@@ -55,9 +53,9 @@ If this work is helpful for your research, please consider citing:
 ```
 @article{fu2025minddrive,
   title={MindDrive: A Vision-Language-Action Model for Autonomous Driving via Online Reinforcement Learning},
-  author={Haoyu Fu and Diankun Zhang and Zongchuang Zhao and Jianfeng Cui and Dingkang Liang  and Hongwei Xie and Bing Wang and Xiang Bai},
-  journal={},
-  year={2025}
+  author={Haoyu Fu and Diankun Zhang and Zongchuang Zhao and Jianfeng Cui and Hongwei Xie and Bing Wang and Guang Chen and Dingkang Liang and Xiang Bai},
+  journal={arXiv Preprint arXiv:2512.13636},  
+  year={2025},
 }
 ```
 ```
