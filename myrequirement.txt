@@ -1,0 +1,26 @@
+shapely==1.8.5.post1
+# transformers == 4.31.0 # old
+transformers == 4.45.2
+peft==0.12.0
+numpy==1.23.0
+numba==0.48.0
+SentencePiece
+
+# for RL
+gym
+pygame
+h5py
+stable_baselines3
+zmq
+diffusers==0.32.0
+
+export PYTHONPATH="$PWD:$PYTHONPATH:/home/carla/PythonAPI:/home/carla/PythonAPI/carla:rl_projects/:rl_projects/scenario_runner"
+
+# 设置其他环境变量
+export TORCH_DISTRIBUTED_DEBUG="INFO"
+export CARLA_ROOT="/home/carla"
+export CARLA_SERVER="/home/carla/CarlaUE4.sh"
+export SCENARIO_RUNNER_ROOT="rl_projects/scenario_runner"
+export CUDA_VISIBLE_DEVICES="0"
+export DEBUG_SHOW_PRED="0"
+export SAVE_PATH="./carla/"

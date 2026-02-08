@@ -23,29 +23,98 @@ Current Vision-Language-Action (VLA) paradigms in autonomous driving primarily r
 </div>
 
 ## News
-
+`[2026/02/08]` Minddrive code and dataset are now released!
 `[2025/12/16]` [ArXiv](https://arxiv.org/abs/2512.13636) paper release.
 
 ## Currently Supported Features
 
-- [ ] MindDrive Inference Framework
-- [ ] Closed-loop Evaluation
-- [ ] MindDrive Checkpoint
-- [ ] MindDrive Training Framework
+- [x] MindDrive Inference Framework
+- [x] Close-loop Evaluation
+- [x] MindDrive Checkpoint
+- [x] MindDrive Training Framework
 
+## Getting Started
 
+```
+git clone https://github.com/xiaomi-mlab/MindDrive.git
+cd ./MindDrive
+conda create -n MindDrive python=3.8 -y
+conda activate MindDrive
+pip install torch==2.4.1+cu118 torchvision==0.19.1+cu118 torchaudio==2.4.1 --index-url https://download.pytorch.org/whl/cu118
+pip install -v -e .
+pip install -r requirements.txt
+```
+Download and setup CARLA 0.9.15
+```
+    mkdir /home/carla
+    cd /home/carla
+    wget https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/CARLA_0.9.15.tar.gz
+    tar -xvf CARLA_0.9.15.tar.gz
+    cd Import && wget https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/AdditionalMaps_0.9.15.tar.gz
+    cd .. && bash ImportAssets.sh
+    export CARLA_ROOT=/home/carla
+    echo "$CARLA_ROOT/PythonAPI/carla/dist/carla-0.9.15-py3.7-linux-x86_64.egg" >> YOUR_CONDA_PATH/envs/MindDrive/lib/python3.7/site-packages/carla.pth # python 3.8 also works well
+```
+## Preparation
+To help reproduce the results of Minddrive, we update the Chat-B2D dataset by incorporating meta-action VQA for each frame. The dataset is available at [here](https://huggingface.co/datasets/poleyzdk/Chat-B2D/resolve/main/ChatB2D-plus.zip?download=true).
+
+We pretrain the [2D LLM weights](https://huggingface.co/poleyzdk/Minddrive/tree/main) and the [vision encoder + projector weights](https://huggingface.co/poleyzdk/Minddrive/tree/main) for the Qwen2-0.5B model, following the approach of Orion.
+
+```
+cd /path/to/Minddrive
+mkdir ckpts
+```
+
+## Train
+### Prepare data
+Unzip the dataset:
+```
+unzip Chat-B2D-plus.zip -d data/
+```
+### Imitation Learning
+Following Orion’s approach, this project uses a three-stage training pipeline (stage1, stage2, stage3). In the imitation learning stage we build a one-to-one mapping between language and trajectories.
+```
+./adzoo/minddrive/minddrive_dist_train.sh adzoo/minddrive/configs/minddrive_qwen2_05b_train_stage1.py $GPU
+# or
+./adzoo/minddrive/minddrive_dist_train.sh adzoo/minddrive/configs/minddrive_qwen2_05b_train_stage2(3).py $GPU
+```
+To save training time and GPU memory, we only train the LoRA of the action expert.
+After Imitation Learning, we copy the action expert’s weights into the decision expert and the value net so they share the trained representations.
+
+```
+python rl_projects/convert_checkpoint.py
+```
+
+### Reinforcement Learning
+Rollout (data collection):
+```
+bash adzoo/minddrive/minddrive_run_collection_multi.sh
+```
+The rollout script collects interaction data. The dataset is automatically decoupled and output to $DECOUPLE_OUTPUT.
+
+RL training (PPO) example:
+```
+bash adzoo/minddrive/minddrive_run_mutil_train_ppo.sh 8 adzoo/minddrive/configs/minddrive_rl_ppo_train.py <imitation_weights_path> $DECOUPLE_OUTPUT/dataset_index.pkl
+```
 
 ## Results and Checkpoints
 
-### Closed-loop Results on Bench2Drive
-| Method         | Driving Score | Success Rate(%) | Config | Download | Eval Json |
-| :---:          | :---:        | :---:           | :---:  | :---:    | :---:     |
-| UniAD-Tiny     | 40.73        | 13.18           | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_tiny_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/1psr7AKYHD7CitZ30Bz-9sA?pwd=1234 )| [Json](assets/results/UniAD-Tiny.json) |
-| UniAD-Base     | 45.81        | 16.36           | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/tiny_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_base_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/11p9IUGqTax1f4W_qsdLCRw?pwd=1234) | [Json](assets/results/UniAD-Base.json) |
-| VAD            | 42.35        | 15.00           | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/vad/configs/VAD/VAD_base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/vad_b2d_base.pth)/[Baidu Cloud](https://pan.baidu.com/s/1rK7Z_D-JsA7kBJmEUcMMyg?pwd=1234) | [Json](assets/results/VAD.json) |
-| ORION-7B       | 77.74        | 54.62           | [config](adzoo/orion/configs/orion_stage3.py) | [Hugging Face](https://huggingface.co/poleyzdk/Orion/blob/main/Orion.pth)| [Json](assets/results/ORION.json) |
-| MindDrive-0.5B | 78.04        | 55.09           | config | - | - |
 
+### Orion and other baselines
+| Method | L2 (m) 2s | Driving Score | Success Rate(%) | Config | Download | Eval Json|
+| :---: | :---: | :---: | :---: |  :---: | :---: | :---: |
+| UniAD-Tiny |0.80 | 40.73 |  13.18 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_tiny_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/1psr7AKYHD7CitZ30Bz-9sA?pwd=1234 )| [Json](assets/results/UniAD-Tiny.json) |
+| UniAD-Base |0.73 | 45.81  |  16.36 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/tiny_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_base_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/11p9IUGqTax1f4W_qsdLCRw?pwd=1234) | [Json](assets/results/UniAD-Base.json) |
+| VAD        |0.91 | 42.35  | 15.00 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/vad/configs/VAD/VAD_base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/vad_b2d_base.pth)/[Baidu Cloud](https://pan.baidu.com/s/1rK7Z_D-JsA7kBJmEUcMMyg?pwd=1234) | [Json](assets/results/VAD.json) |
+| ORION-7B       |0.68 | 77.74  | 54.62 | [config](adzoo/orion/configs/orion_stage3.py) | [Hugging Face](https://huggingface.co/poleyzdk/Orion/blob/main/Orion.pth)| [Json](assets/results/ORION.json) |
+MindDrive-0.5B   |0.73   | 78.04  | 55.09 | [config](adzoo/minddrive/configs/minddrive_qwen2_05B_infer.py) | [Hugging Face](https://huggingface.co/poleyzdk/Minddrive/resolve/main/minddrive_rltrain.pth?download=true) | [Json](assets/results/minddrive.json) |
+
+
+## Data Usage Statement
+
+This project uses the following external resources:
+
+- **Data**: We use the dataset provided in the Bench2Drive project (source: https://github.com/Thinklab-SJTU/Bench2Drive), which is licensed under the **CC BY-NC-ND 4.0** license.
 
 ## Citation
 If this work is helpful for your research, please consider citing:
