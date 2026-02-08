@@ -9,7 +9,7 @@ ALGO=minddrive_collect_ma_stage3
 SAVE_PATH=./carla/rollout_routes_${ALGO}_${PLANNER_TYPE}
 BASE_CHECKPOINT_ENDPOINT=collection_routes_test
 DECOUPLE_SCRIPT="rl_projects/decode_rollout_dataset.py" 
-DECOUPLE_OUTPUT="./carla/rollout_data/rollout_data_processed_$(date +%Y%m%d)"
+DECOUPLE_OUTPUT="./carla/rollout_data/rollout_data_processed_${ALGO}_$(date +%Y%m%d)_pkl"
 # ==========================
 SPLIT_NUM=44
 
@@ -96,7 +96,7 @@ run_worker() {
         
         echo -e "\033[34m [GPU $gpu_id] Processing: $original_filename \033[0m"
         
-        bash -e adzoo/minddrive/orion_run_collection.sh \
+        bash -e adzoo/minddrive/run_collection.sh \
             $port $tm_port "$task_path" "$CHECKPOINT_JSON" \
             "$SAVE_PATH" "$gpu_id" "$CONFIG" > "${task_path}.log" 2>&1
         
@@ -123,7 +123,12 @@ echo -e "***********************************************************************
 echo -e "Starting Dynamic Load Balancing..."
 echo -e "***********************************************************************************"
 
-for i in {0..7}; do
+# for i in {0..7}; do
+#     run_worker $i &
+# done
+
+# for debug
+for i in 0; do
     run_worker $i &
 done
 
@@ -150,15 +155,3 @@ if [ $? -ne 0 ]; then
 fi
 
 echo -e "\033[32m Decoupling finished successfully. \033[0m"
-
-
-# # ================= Training =================
-echo -e "***********************************************************************************"
-echo -e "Starting Training..."
-echo -e "***********************************************************************************"
-
-# TODO
-
-# bash adzoo/minddrive/orion_run_mutil_train_ppo.sh 8 adzoo/minddrive/configs/minddrive_rl_ppo_train.py work_dirs/minddrive_qwen2_05b_train_stage3/iter_11004_Minddrive.pth
-
-# echo -e "\033[32m Pipeline Completed. \033[0m"

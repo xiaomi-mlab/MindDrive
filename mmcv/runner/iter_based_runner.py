@@ -24,8 +24,6 @@ import os
 from tabulate import tabulate
 
 from team_code.carla_env.carla_env_scenario import CarlaScenarioEnv, TickRuntimeError
-from rl_projects.stable_baseline.state_commons import create_encode_state_fn
-from rl_projects.stable_baseline.config import CONFIG, _CONFIG_rule_ppo
 
 from mmcv.parallel.collate import collate as mm_collate_to_batch_form
 import copy
@@ -43,9 +41,8 @@ def tensor_to_device(data, device):
         return [tensor_to_device(v, device) for v in data]
     elif isinstance(data, tuple):
         return tuple(tensor_to_device(v, device) for v in data)
-    # 其他容器类型（如自定义类、集合等）可按需扩展
     else:
-        return data  # 非张量/非容器类型直接返回
+        return data 
 
 class IterLoader:
 
@@ -457,26 +454,12 @@ class RLIterBasedRunner(BaseRunner):
             'new_input_ids':new_input_ids,
         }
 
-        # batch_observations['timestamp'] = [ts.squeeze(0) if ts.dim() > 1 else ts for ts in batch_observations['timestamp']] # TODO@Diankun
-        # batch_observations['episode_starts'] = [st for st in episode_starts.unsqueeze(-1)]
 
         action_log_probs, action_lang_log_probs, state_values= self.model(meta_action_info, return_loss=False, is_rl_training=True)
 
-        # action_log_probs, action_lang_log_probs = self.model.module.llm_model.forward_rl(batch_observations)
-        # hidden_state_values = self.model.module.value_net.forward_rl_value(batch_observations)
-        # state_values = self.model.module.value_net_pro(hidden_state_values) # (16, 1)
-
-        # reference_action_log_prob, ref_language_log_probs = self.model.module.lm_head.forward_rl(batch_observations)
-        # Normalize advantage
-        # Normalization does not make sense if mini batchsize == 1, see GH issue #325
         if self.normalize_advantage and len(advantages) > 1:
             advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
-            # advantages = advantages.unsqueeze(-1).unsqueeze(-1)
-            # advantages = advantages.reshape(self.ppo_batch_size, 2)
-            # advantages = (advantages - advantages.mean(dim=0)) / (advantages.std(dim=0) + 1e-8)
-            # advantages = advantages.flatten()
-        # ratio between old and new policy, should be one at the first iteration
-        # ref_log_probs = F.log_softmax(ref_log_probs, dim=-1)
+
         selected_action_log_probs = action_log_probs.gather(1, actions.long()).squeeze(1)
         selected_ref_log_probs = ref_log_probs.gather(1, actions.long()).squeeze(1)
         ratio = torch.exp(selected_action_log_probs - selected_ref_log_probs)
@@ -486,31 +469,18 @@ class RLIterBasedRunner(BaseRunner):
         policy_loss_2 = advantages * torch.clamp(ratio, 1 - clip_range, 1 + clip_range)
         policy_loss = -torch.min(policy_loss_1, policy_loss_2).mean()
 
-        # Logging
         losses['ppo_loss'] = policy_loss
-        # pg_losses.append(policy_loss.item())
 
         if self.clip_range_vf is None:
-            # No clipping
             pred_values = state_values 
-        else:# 没用
-            # Clip the difference between old and new value
-            # NOTE: this depends on the reward scaling
+        else:
+            # pass
             pred_values = values + torch.clamp(
                 pred_values - values, -self.clip_range_vf, self.clip_range_vf
             )
-        # Value loss using the TD(gae_lambda) target
         value_loss = F.mse_loss(pred_values, returns)
         losses['value_loss'] = self.vf_coef * value_loss
-        # kl loss
-        # language
-        # kl_loss = F.kl_div(
-        #     action_lang_log_probs.squeeze(-1),
-        #     ref_language_log_probs.squeeze(1).squeeze(1), 
-        #     log_target=True, 
-        #     reduction='batchmean'
-        # )
-        # action
+
         if hasattr(args, 'no_use_kl'):
             no_use_kl = args.no_use_kl
         else:
@@ -541,14 +511,7 @@ class RLIterBasedRunner(BaseRunner):
                         if 'loss' in _key)
 
         losses['loss'] = total_loss
-        # losses['reward']  = returns.mean()
-        # losses['mean_episode_reward'] = torch.tensor(self.rollout_buffer.episode_infos['MEAN_EPISODE_REWARD'],device=returns.device, dtype=torch.float32)
-        # losses['mean_episode_steps'] = torch.tensor(self.rollout_buffer.episode_infos['MEAN_EPISODE_STEPS'],device=returns.device, dtype=torch.float32)
-        # for k in self.rollout_buffer.infos[0,0,0]['DONE_INFO_KEYS']:
-        #     losses[f'mean_episode_{k.lower()}'] = torch.tensor(self.rollout_buffer.episode_infos[f"MEAN_EPISODE_COUNT_{k}"],device=returns.device, dtype=torch.float32)
-        
-        # if dist.is_available() and dist.is_initialized():
-        #         print(f"PPO iter on Rank {dist.get_rank()} finished! waiting for other GPUs...")
+
         for loss_name, loss_value in losses.items():
             # reduce loss when distributed training
             if dist.is_available() and dist.is_initialized():

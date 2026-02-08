@@ -42,22 +42,12 @@ class PIDController(object):
         self.lookahead_max = lookahead_max
 
     def control_pid(self, speed_waypoint, path_waypoint, speed, command=None):
-        ''' Predicts vehicle control with a PID controller.
-        Args:
-            path_waypoint (list): 转向路径点列表
-            speed_waypoint (list): 速度路径点列表
-            speed (float): 当前速度
-            target (np.array): 目标点坐标
-        '''
-        # ====================== 横向控制部分 ======================
         lookahead = round(self.lookahead_scale * speed + self.lookahead_offset)
         lookahead = np.clip(lookahead, self.lookahead_min, self.lookahead_max)
         lookahead = min(lookahead, len(path_waypoint) - 1)
         aim = path_waypoint[lookahead]
-        # print(lookahead)
         aim_last = path_waypoint[-1] - path_waypoint[-2]
 
-        # ====================== 速度控制部分 ======================#
         if command is not None:
             if command == 0:  # maintain moderate speed
                 desired_speed_command = 3.0
@@ -81,7 +71,6 @@ class PIDController(object):
         else:
             desired_speed = desired_speed_waypoint
 
-        # ====================== 通用计算部分 ======================
         angle = np.degrees(np.pi/2 - np.arctan2(aim[1], aim[0]))/90 if aim[1] > 0.02 else 0.0
         angle_last = np.degrees(np.pi/2 - np.arctan2(aim_last[1], aim_last[0]))/90
 

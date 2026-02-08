@@ -24,6 +24,7 @@ Current Vision-Language-Action (VLA) paradigms in autonomous driving primarily r
 
 ## News
 `[2026/02/08]` Minddrive code and dataset are now released!
+
 `[2025/12/16]` [ArXiv](https://arxiv.org/abs/2512.13636) paper release.
 
 ## Currently Supported Features
@@ -46,14 +47,14 @@ pip install -r requirements.txt
 ```
 Download and setup CARLA 0.9.15
 ```
-    mkdir /home/carla
-    cd /home/carla
-    wget https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/CARLA_0.9.15.tar.gz
-    tar -xvf CARLA_0.9.15.tar.gz
-    cd Import && wget https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/AdditionalMaps_0.9.15.tar.gz
-    cd .. && bash ImportAssets.sh
-    export CARLA_ROOT=/home/carla
-    echo "$CARLA_ROOT/PythonAPI/carla/dist/carla-0.9.15-py3.7-linux-x86_64.egg" >> YOUR_CONDA_PATH/envs/MindDrive/lib/python3.7/site-packages/carla.pth # python 3.8 also works well
+mkdir /home/carla
+cd /home/carla
+wget https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/CARLA_0.9.15.tar.gz
+tar -xvf CARLA_0.9.15.tar.gz
+cd Import && wget https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/AdditionalMaps_0.9.15.tar.gz
+cd .. && bash ImportAssets.sh
+export CARLA_ROOT=/home/carla
+echo "$CARLA_ROOT/PythonAPI/carla/dist/carla-0.9.15-py3.7-linux-x86_64.egg" >> YOUR_CONDA_PATH/envs/MindDrive/lib/python3.8/site-packages/carla.pth
 ```
 ## Preparation
 To help reproduce the results of Minddrive, we update the Chat-B2D dataset by incorporating meta-action VQA for each frame. The dataset is available at [here](https://huggingface.co/datasets/poleyzdk/Chat-B2D/resolve/main/ChatB2D-plus.zip?download=true).
@@ -107,7 +108,7 @@ bash adzoo/minddrive/minddrive_run_mutil_train_ppo.sh 8 adzoo/minddrive/configs/
 | UniAD-Base |0.73 | 45.81  |  16.36 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/uniad/configs/stage2_e2e/tiny_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/uniad_base_b2d.pth)/[Baidu Cloud](https://pan.baidu.com/s/11p9IUGqTax1f4W_qsdLCRw?pwd=1234) | [Json](assets/results/UniAD-Base.json) |
 | VAD        |0.91 | 42.35  | 15.00 | [config](https://github.com/Thinklab-SJTU/Bench2DriveZoo/tree/uniad/vad/adzoo/vad/configs/VAD/VAD_base_e2e_b2d.py) | [Hugging Face](https://huggingface.co/rethinklab/Bench2DriveZoo/blob/main/vad_b2d_base.pth)/[Baidu Cloud](https://pan.baidu.com/s/1rK7Z_D-JsA7kBJmEUcMMyg?pwd=1234) | [Json](assets/results/VAD.json) |
 | ORION-7B       |0.68 | 77.74  | 54.62 | [config](adzoo/orion/configs/orion_stage3.py) | [Hugging Face](https://huggingface.co/poleyzdk/Orion/blob/main/Orion.pth)| [Json](assets/results/ORION.json) |
-MindDrive-0.5B   |0.73   | 78.04  | 55.09 | [config](adzoo/minddrive/configs/minddrive_qwen2_05B_infer.py) | [Hugging Face](https://huggingface.co/poleyzdk/Minddrive/resolve/main/minddrive_rltrain.pth?download=true) | [Json](assets/results/minddrive.json) |
+MindDrive-0.5B   |0.69   | 78.04  | 55.09 | [config](adzoo/minddrive/configs/minddrive_qwen2_05B_infer.py) | [Hugging Face](https://huggingface.co/poleyzdk/Minddrive/resolve/main/minddrive_rltrain.pth?download=true) | [Json](assets/results/minddrive.json) |
 
 
 ## Data Usage Statement
@@ -115,6 +116,8 @@ MindDrive-0.5B   |0.73   | 78.04  | 55.09 | [config](adzoo/minddrive/configs/min
 This project uses the following external resources:
 
 - **Data**: We use the dataset provided in the Bench2Drive project (source: https://github.com/Thinklab-SJTU/Bench2Drive), which is licensed under the **CC BY-NC-ND 4.0** license.
+
+- The authors confirm that the use of the above data in this project is strictly limited to academic research and has not involved any commercial activities.
 
 ## Citation
 If this work is helpful for your research, please consider citing:
